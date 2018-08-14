@@ -10,7 +10,9 @@ namespace PaymentGatewayAPI.Models
     public class TransactionModel
     {
         [BsonId]
-        public ObjectId TransactionID { get; set; }
+        [BsonRepresentation(BsonType.ObjectId)]
+        public string TransactionID { get; set; }
+        public long TransactionCode { get; set; }
 
         public int AmountInCents { get; set; }
         public string CreditCardBrand { get; set; }

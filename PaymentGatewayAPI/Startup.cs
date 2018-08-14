@@ -34,8 +34,8 @@ namespace PaymentGatewayAPI
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseMvcWithDefaultRoute();
-            //app.UseMvc();
+            //app.UseMvcWithDefaultRoute();
+            app.UseMvc();
         }
     }
 }

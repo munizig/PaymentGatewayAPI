@@ -8,33 +8,44 @@ using PaymentGatewayAPI.Services;
 
 namespace PaymentGatewayAPI.Controllers
 {
-    [Route("[controller]")]
+    [Produces("application/json")]
+    [Route("api/[controller]")]
     public class TransactionController : Controller
     {
 
-        //[HttpGet]
-        //public Ihttp
+        MongoDBService mongoDBService;
 
-        // GET gateway/5
-        [HttpGet("{id}")]
-        public async Task<JsonResult> Get(int id)
+        public TransactionController()
         {
-            var dbService = new MongoDBService("GatewayDB", "Transaction", "mongodb://");
-            var item = await dbService.GetTransaction(null);
+            mongoDBService = new MongoDBService("Transaction");
+        }
 
+        // GET api/transaction
+        [HttpGet]
+        public async Task<JsonResult> Get()
+        {
+            var lista = await mongoDBService.ListTransaction();
+            return Json(lista);
+        }
+
+        // GET api/transaction/5
+        [HttpGet("{id}", Name = "Get")]
+        public async Task<JsonResult> Get(long id)
+        {
+            var item = await mongoDBService.GetTransaction(id);
             return Json(item);
         }
 
-        // POST gateway
+        // POST api/transaction
         [HttpPost]
-        public void Post([FromBody]string value)
+        public async Task Post([FromBody]TransactionModel transaction)
         {
-            var dbService = new MongoDBService("GatewayDB", "Transaction", "mongodb://");
-            //await dbService.insert
-            
+            transaction.DateLog = DateTime.Now;
+            transaction.TransactionCode = new Random(DateTime.Now.Millisecond).Next(500, int.MaxValue);
+            await mongoDBService.InsertTransaction(transaction);
         }
 
-        //// PUT gateway/5
+        //// PUT api/transaction/5
         //[HttpPut("{id}")]
         //public void Put(int id, [FromBody]string value)
         //{
