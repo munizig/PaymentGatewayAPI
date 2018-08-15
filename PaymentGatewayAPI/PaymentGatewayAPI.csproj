@@ -5,18 +5,21 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Folder Include="Models\" />
+    <Folder Include="Services\" />
     <Folder Include="wwwroot\" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.9" />
-    <PackageReference Include="nlog" Version="4.5.8" />
-    <PackageReference Include="nlog.config" Version="4.5.8" />
-    <PackageReference Include="nlog.Mongo" Version="4.5.0.57" />
   </ItemGroup>
 
   <ItemGroup>
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\PaymentGatewayAPI.Service\PaymentGatewayAPI.Service.csproj" />
   </ItemGroup>
 
 </Project>
