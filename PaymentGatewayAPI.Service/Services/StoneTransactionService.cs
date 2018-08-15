@@ -1,6 +1,7 @@
 ﻿using GatewayApiClient;
 using GatewayApiClient.DataContracts;
 using GatewayApiClient.DataContracts.EnumTypes;
+using GatewayApiClient.Utility;
 using PaymentGatewayAPI.Contract;
 using PaymentGatewayAPI.Service.Interface;
 using System;
@@ -28,7 +29,7 @@ namespace PaymentGatewayAPI.Service.Services
         /// <summary>
         /// 
         /// </summary>
-        public void CreateCreditCardTransaction(TransactionModel newTransaction)
+        public HttpResponse CreateCreditCardTransaction(TransactionModel newTransaction)
         {
 
             // Cria a transação.
@@ -74,6 +75,7 @@ namespace PaymentGatewayAPI.Service.Services
                 Console.WriteLine("Status transação: {0}", httpResponse.Response.CreditCardTransactionResultCollection.FirstOrDefault().CreditCardTransactionStatus);
             }
 
+            return httpResponse;
 
         }
 
@@ -100,7 +102,6 @@ namespace PaymentGatewayAPI.Service.Services
         public async Task IncludeTransactionDB(TransactionModel transaction)
         {
             transaction.DateLog = DateTime.Now;
-            transaction.TransactionCode = new Random(DateTime.Now.Millisecond).Next(500, int.MaxValue);
             await mongoDBService.InsertTransaction(transaction);
         }
 

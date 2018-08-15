@@ -11,6 +11,7 @@ namespace PaymentGatewayAPI.Controllers
 
         public TransactionController()
         {
+
         }
 
         // GET api/transaction
@@ -30,6 +31,11 @@ namespace PaymentGatewayAPI.Controllers
         // POST api/transaction
         [HttpPost]
         public async Task Post([FromBody]TransactionModel transaction)
+        {
+            await CreateTransaction();
+        }
+
+        private async Task CreateTransaction()
         {
 
         }

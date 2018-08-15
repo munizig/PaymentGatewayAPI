@@ -1,5 +1,6 @@
 ﻿using MongoDB.Driver;
 using PaymentGatewayAPI.Contract;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -31,7 +32,7 @@ namespace PaymentGatewayAPI.Service
             return await transactions.ToListAsync();
         }
 
-        public async Task<TransactionModel> GetTransaction(long transactionCode)
+        public async Task<TransactionModel> GetTransaction(Guid transactionCode)
         {
             var transactions = await TransactionCollection.FindAsync(x=>x.TransactionCode == transactionCode);
             return await transactions.FirstOrDefaultAsync();
