@@ -8,6 +8,6 @@ namespace PaymentGatewayAPI.Service.Interface
     {
         HttpResponse CreateCreditCardTransaction(TransactionModel newTransaction);
         void GetTransaction();
-        Task IncludeTransactionDB(TransactionModel transaction);
+        //Task IncludeTransactionDB(TransactionModel transaction);
     }
 }

@@ -11,7 +11,7 @@ namespace PaymentGatewayAPI.Contract
     {
         public TransactionModel()
         {
-            DateLog = DateTime.Now;
+            //DateLog = DateTime.Now;
             TransactionCode = Guid.NewGuid();
         }
 
@@ -60,11 +60,17 @@ namespace PaymentGatewayAPI.Contract
         [DataMember]
         public string OrderReference { get; set; }
         [DataMember]
-        public DateTime DateLog { get; set; }
+        public DateTime DateCreation { get; set; }
         [DataMember]
         public int StatusCode { get; set; }
         [DataMember]
         public int OrderKey { get; set; }
 
+        
+        /// <summary>
+        /// Código da LOJA solicitante da transação
+        /// </summary>
+        [DataMember]
+        public int StoreID { get; set; }
     }
 }

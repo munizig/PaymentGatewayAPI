@@ -8,6 +8,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using PaymentGatewayAPI.Service.Interface;
+using PaymentGatewayAPI.Service.Services;
 
 namespace PaymentGatewayAPI
 {
@@ -24,6 +26,8 @@ namespace PaymentGatewayAPI
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
+            services.AddScoped<ITransactionService, TransactionService>();
+            services.AddScoped<IStoneTransactionService, StoneTransactionService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

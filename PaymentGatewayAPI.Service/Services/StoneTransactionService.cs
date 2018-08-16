@@ -15,15 +15,12 @@ namespace PaymentGatewayAPI.Service.Services
     public class StoneTransactionService : IStoneTransactionService
     {
         //Serviço MongoDB
-        MongoDBService mongoDBService;
 
         //EndPoint da Stone
         private readonly Uri _endpoint = new Uri("https://transaction.stone.com.br");
 
         public StoneTransactionService()
         {
-            //Instancia da coleção Transaction no MongoDB
-            mongoDBService = new MongoDBService("Transaction");
         }
 
         /// <summary>
@@ -97,12 +94,6 @@ namespace PaymentGatewayAPI.Service.Services
                     Console.WriteLine("Número do pedido: {0}", sale.OrderData.OrderReference);
                 }
             }
-        }
-
-        public async Task IncludeTransactionDB(TransactionModel transaction)
-        {
-            transaction.DateLog = DateTime.Now;
-            await mongoDBService.InsertTransaction(transaction);
         }
 
     }
