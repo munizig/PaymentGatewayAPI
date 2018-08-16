@@ -28,6 +28,8 @@ namespace PaymentGatewayAPI
             services.AddMvc();
             services.AddScoped<ITransactionService, TransactionService>();
             services.AddScoped<IStoneTransactionService, StoneTransactionService>();
+            services.AddScoped<ICieloTransactionService, CieloTransactionService>();
+            services.AddScoped<IStoreService, StoreService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

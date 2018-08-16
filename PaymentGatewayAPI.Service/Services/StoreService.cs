@@ -1,5 +1,6 @@
 ﻿using MongoDB.Driver;
 using PaymentGatewayAPI.Contract;
+using PaymentGatewayAPI.Service.Interface;
 using System.Threading.Tasks;
 
 namespace PaymentGatewayAPI.Service.Services
@@ -7,7 +8,7 @@ namespace PaymentGatewayAPI.Service.Services
     /// <summary>
     /// Classe com métodos de CRUD para Store
     /// </summary>
-    public class StoreService
+    public class StoreService : IStoreService
     {
         private IMongoCollection<StoreModel> Collection { get; set; }
 

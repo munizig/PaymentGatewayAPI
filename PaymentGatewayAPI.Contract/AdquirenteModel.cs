@@ -41,7 +41,7 @@ namespace PaymentGatewayAPI.Contract
         /// Lista de cartões aceitos por adquirente
         /// </summary>
         [DataMember]
-        public List<CreditCardBrandEnum> ListaBandeiraCartao { get; set; }
+        public List<CreditCardBrandEnum?> ListaBandeiraCartao { get; set; }
     }
 
 

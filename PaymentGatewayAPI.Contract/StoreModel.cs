@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Runtime.Serialization;
 
 namespace PaymentGatewayAPI.Contract
@@ -43,7 +44,7 @@ namespace PaymentGatewayAPI.Contract
         /// Lista de adquirentes da Loja
         /// </summary>
         [DataMember]
-        public AdquirenteModel ListaAdquirente { get; set; }
+        public List<AdquirenteModel> ListaAdquirente { get; set; }
 
 
     }
