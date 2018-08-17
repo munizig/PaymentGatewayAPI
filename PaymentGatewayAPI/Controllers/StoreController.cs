@@ -4,6 +4,7 @@ using PaymentGatewayAPI.Contract.Enums;
 using PaymentGatewayAPI.Service.Interface;
 using PaymentGatewayAPI.Service.Services;
 using System.Threading.Tasks;
+using Swashbuckle.AspNetCore.Swagger;
 
 namespace PaymentGatewayAPI.Controllers
 {
