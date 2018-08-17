@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace PaymentGatewayAPI.Controllers
 {
     [Produces("application/json")]
-    [Route("api/Store")]
+    [Route("api/[controller]")]
     public class StoreController : Controller
     {
         #region Properties
@@ -23,12 +23,15 @@ namespace PaymentGatewayAPI.Controllers
 
         #region Basic Methods
 
-        [HttpGet("{id}", Name = "Get")]
+        [HttpGet("{id}")]
         public async Task<JsonResult> Get(string id)
         {
             try
             {
-                return Json(await _storeService.GetStore(id));
+                if (!string.IsNullOrWhiteSpace(id))
+                    return Json(await _storeService.GetStore(id));
+                else
+                    return Json(new MessageModel("NOT", TipoClasseMensagemEnum.Store));
             }
             catch (System.Exception)
             {
@@ -41,7 +44,10 @@ namespace PaymentGatewayAPI.Controllers
         {
             try
             {
-                return Json(await _storeService.SetStore(store));
+                if (store != null)
+                    return Json(await _storeService.SetStore(store));
+                else
+                    return Json(new MessageModel("ERR", TipoClasseMensagemEnum.Store));
             }
             catch (System.Exception)
             {

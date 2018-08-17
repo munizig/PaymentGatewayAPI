@@ -12,7 +12,7 @@ namespace PaymentGatewayAPI.Service.Interface
         /// </summary>
         /// <param name="transactionCode"></param>
         /// <returns></returns>
-        Task<TransactionModel> GetTransaction(Guid transactionCode);
+        Task<TransactionModel> GetTransaction(string transactionCode);
 
         /// <summary>
         /// Incluir nova transação no sistema. Faz também o envio para a Adquirente.
@@ -26,6 +26,6 @@ namespace PaymentGatewayAPI.Service.Interface
         /// </summary>
         /// <param name="storeID"></param>
         /// <returns></returns>
-        Task<List<TransactionModel>> ListStoreTransaction(int storeID);
+        Task<List<TransactionModel>> ListStoreTransaction(string storeID);
     }
 }

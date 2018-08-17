@@ -3,6 +3,7 @@ using MongoDB.Driver;
 using PaymentGatewayAPI.Contract;
 using PaymentGatewayAPI.Contract.Enums;
 using PaymentGatewayAPI.Service.Interface;
+using System;
 using System.Threading.Tasks;
 
 namespace PaymentGatewayAPI.Service.Services
@@ -28,9 +29,9 @@ namespace PaymentGatewayAPI.Service.Services
         {
             try
             {
-                return await Collection.Find(x => x.ID == ObjectId.Parse(storeID)).FirstOrDefaultAsync();
+                return await Collection.Find(x => x.StoreID == Guid.Parse(storeID)).FirstOrDefaultAsync();
             }
-            catch (System.Exception)
+            catch (Exception ex)
             {
                 throw;
             }
@@ -45,11 +46,13 @@ namespace PaymentGatewayAPI.Service.Services
         {
             try
             {
+                storeModel.StoreID = Guid.NewGuid();
+                storeModel.DateCreation = DateTime.Now;
                 //Obtem o ID do item incluído
                 await Collection.InsertOneAsync(storeModel);
-                return new MessageModel("SUC", TipoClasseMensagemEnum.Store, storeModel.ID.ToString());
+                return new MessageModel("SUC", TipoClasseMensagemEnum.Store, storeModel.StoreID.ToString());
             }
-            catch (System.Exception)
+            catch (Exception ex)
             {
                 throw;
             }

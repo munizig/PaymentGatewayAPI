@@ -11,12 +11,16 @@ namespace PaymentGatewayAPI.Contract
 
         [DataMember]
         public string CreditCardNumber { get; set; }
+
         [DataMember]
         public int ExpMonth { get; set; }
+
         [DataMember]
         public int ExpYear { get; set; }
+
         [DataMember]
         public int SecurityCode { get; set; }
+
         [DataMember]
         public string HolderName { get; set; }
 
@@ -28,15 +32,15 @@ namespace PaymentGatewayAPI.Contract
         {
             get
             {
-                if (this.CreditCardBrandEnum == null) { return null; }
-                return this.CreditCardBrandEnum.Value.ToString();
+                if (this.CreditCardBrand == null) { return null; }
+                return this.CreditCardBrand.Value.ToString();
             }
             set
             {
                 if (value == null)
-                    this.CreditCardBrandEnum = null;
+                    this.CreditCardBrand = null;
                 else
-                    this.CreditCardBrandEnum = (CreditCardBrandEnum)Enum.Parse(typeof(CreditCardBrandEnum), value);
+                    this.CreditCardBrand = (CreditCardBrandEnum)Enum.Parse(typeof(CreditCardBrandEnum), value);
             }
         }
 
@@ -44,7 +48,7 @@ namespace PaymentGatewayAPI.Contract
         /// Bandeira do cartão de crédito
         /// </summary>
         [IgnoreDataMember]
-        public CreditCardBrandEnum? CreditCardBrandEnum { get; set; }
+        public CreditCardBrandEnum? CreditCardBrand { get; set; }
 
         #endregion
     }

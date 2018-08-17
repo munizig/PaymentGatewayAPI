@@ -28,19 +28,19 @@ namespace PaymentGatewayAPI.Controllers
         #region Basic Methods
 
         // GET api/transaction/5
-        [HttpGet("{id}", Name = "Get")]
+        [HttpGet("{id}")]
         public async Task<JsonResult> Get(string id)
         {
             try
             {
-                if (Guid.TryParse(id, out Guid result))
-                    return Json(await _transactionService.GetTransaction(result));
+                if (!string.IsNullOrWhiteSpace(id))
+                    return Json(await _transactionService.GetTransaction(id));
                 else
-                    return Json(new MessageModel("ERR", TipoClasseMensagemEnum.Transaction));
+                    return Json(new MessageModel("NOT", TipoClasseMensagemEnum.Transaction));
             }
             catch (Exception)
             {
-                return Json(new MessageModel("ERR", TipoClasseMensagemEnum.Transaction));
+                return Json(new MessageModel("NOT", TipoClasseMensagemEnum.Transaction));
             }
         }
 
@@ -66,11 +66,11 @@ namespace PaymentGatewayAPI.Controllers
         #region Custom Methods
 
         [HttpGet]
-        public async Task<JsonResult> GetListTransaction(int storeId)
+        public async Task<JsonResult> GetListTransaction(string storeId)
         {
             try
             {
-                if (storeId > 0)
+                if (!string.IsNullOrWhiteSpace(storeId))
                     return Json(await _transactionService.ListStoreTransaction(storeId));
                 else
                     return Json(new MessageModel("ERR", TipoClasseMensagemEnum.Transaction));

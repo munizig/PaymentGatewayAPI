@@ -12,7 +12,7 @@ namespace PaymentGatewayAPI.Service.Interface
         /// </summary>
         /// <param name="storeID">ID da Loja</param>
         /// <returns>StoreModel</returns>
-        HttpResponse CreateCreditCardTransaction(TransactionModel transactionModel);
+        HttpResponse<CreateSaleResponse> CreateCreditCardTransaction(TransactionModel transactionModel);
 
         /// <summary>
         /// Método para criar uma nova Store

@@ -13,8 +13,8 @@ namespace PaymentGatewayAPI.Contract
     {
         public AdquirenteModel()
         {
-            DataLog = DateTime.Now;
         }
+
         [DataMember]
         public AdquirenteEnum? IdAdquirente { get; set; }
 
@@ -33,9 +33,6 @@ namespace PaymentGatewayAPI.Contract
                     this.IdAdquirente = (AdquirenteEnum)Enum.Parse(typeof(AdquirenteEnum), value);
             }
         }
-
-        [DataMember]
-        public DateTime? DataLog { get; set; }
 
         /// <summary>
         /// Lista de cartões aceitos por adquirente

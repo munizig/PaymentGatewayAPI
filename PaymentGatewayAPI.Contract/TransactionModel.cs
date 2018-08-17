@@ -16,15 +16,16 @@ namespace PaymentGatewayAPI.Contract
             //TransactionCode = Guid.NewGuid();
         }
 
-        [DataMember]
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
-        public ObjectId TransactionID { get; set; }
+        [DataMember]
+        public ObjectId ID { get; set; }
 
         [DataMember]
-        public Guid TransactionCode { get; set; }
+        public Guid TransactionID { get; set; }
 
-        //public string TransactionCodeText { get { return TransactionCode.ToString(); } }
+        [DataMember]
+        public string TransactionIDText { get { return TransactionID.ToString(); } }
 
         [DataMember]
         public int AmountInCents { get; set; }
@@ -78,8 +79,7 @@ namespace PaymentGatewayAPI.Contract
         /// Código da LOJA solicitante da transação
         /// </summary>
         [DataMember]
-        [BsonRepresentation(BsonType.ObjectId)]
-        public ObjectId StoreID { get; set; }
+        public Guid StoreID { get; set; }
 
         #region Campos Auxiliares
 

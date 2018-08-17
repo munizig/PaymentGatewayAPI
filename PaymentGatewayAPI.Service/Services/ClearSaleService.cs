@@ -47,7 +47,7 @@ namespace PaymentGatewayAPI.Service.Services
                     Convert.ToDecimal(transactionModel.AmountInCents.ToString().Remove(transactionModel.AmountInCents.ToString().Length - 1, transactionModel.AmountInCents.ToString().Length - 2) + "." +
                     transactionModel.AmountInCents.ToString().Substring(transactionModel.AmountInCents.ToString().Length - 1, transactionModel.AmountInCents.ToString().Length - 2) + "M");
 
-                    Enum.TryParse(transactionModel.CreditCard.CreditCardBrandEnum.ToString(), true, out CreditCardType cardBrand);
+                    Enum.TryParse(transactionModel.CreditCard.CreditCardBrand.ToString(), true, out CreditCardType cardBrand);
 
                 ClearSaleRequestSendModel clearSaleRequestModel = new ClearSaleRequestSendModel()
                 {

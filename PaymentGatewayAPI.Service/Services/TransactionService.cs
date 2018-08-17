@@ -1,4 +1,5 @@
-﻿using GatewayApiClient.Utility;
+﻿using GatewayApiClient.DataContracts;
+using GatewayApiClient.Utility;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using PaymentGatewayAPI.Contract;
@@ -17,13 +18,15 @@ namespace PaymentGatewayAPI.Service.Services
     public class TransactionService : ITransactionService
     {
         private IMongoCollection<TransactionModel> Collection { get; set; }
-        private IStoneTransactionService _StoneTransactionService { get; set; }
-        private ICieloTransactionService _CieloTransactionService { get; set; }
+        private IStoneTransactionService _StoneTransactionService;
+        private ICieloTransactionService _CieloTransactionService;
         private string ClearSaleRejectErrorCode => "APA";
 
         public TransactionService()
         {
             Collection = MongoDBService.GetCollection<TransactionModel>("Transaction");
+            _StoneTransactionService = new StoneTransactionService();
+            _CieloTransactionService = new CieloTransactionService();
         }
 
         /// <summary>
@@ -31,13 +34,16 @@ namespace PaymentGatewayAPI.Service.Services
         /// </summary>
         /// <param name="transactionCode"></param>
         /// <returns></returns>
-        public async Task<TransactionModel> GetTransaction(Guid transactionCode)
+        public async Task<TransactionModel> GetTransaction(string transactionID)
         {
             try
             {
-                return await Collection.Find(x => x.TransactionCode == transactionCode).FirstOrDefaultAsync();
+                if (!string.IsNullOrWhiteSpace(transactionID) && Guid.TryParse(transactionID, out Guid transactionGuid))
+                    return await Collection.Find(x => x.TransactionID == transactionGuid).FirstOrDefaultAsync();
+                else
+                    return new TransactionModel();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 throw;
             }
@@ -50,39 +56,42 @@ namespace PaymentGatewayAPI.Service.Services
         /// <returns></returns>
         public async Task<MessageModel> SetTransaction(TransactionModel transaction)
         {
-            MessageModel returnMessage = new MessageModel("ERR", Contract.Enums.TipoClasseMensagemEnum.Transaction);
             try
             {
                 transaction.DateCreation = DateTime.Now;
-                transaction.TransactionCode = Guid.NewGuid();
+                transaction.TransactionID = Guid.NewGuid();
                 //Incluir no BD
                 await Collection.InsertOneAsync(transaction);
 
                 //Validacoes
                 if (transaction.StoreID == null)
-                    return new MessageModel("ERR", TipoClasseMensagemEnum.Transaction, transaction.TransactionID.ToString());
+                    return new MessageModel("ERR", TipoClasseMensagemEnum.Transaction, transaction.TransactionIDText);
 
                 StoreService storeService = new StoreService();
                 StoreModel storeModel = await storeService.GetStore(transaction.StoreID.ToString());
 
-                if (storeModel != null && storeModel.AntiFraude)
+                //Verificar se a loja opta pelo sistema antifraude
+                if (storeModel != null)
                 {
-                    //TODO - IMPLEMENTAR VERIFICAÇÃO ANTIFRAUDE (MOCK)
-                    ClearSaleService clearSaleService = new ClearSaleService();
-                    ClearSaleResponseSendModel clearSaleResponseSendModel = await clearSaleService.RequestSendAsync(transaction);
-                    if (clearSaleResponseSendModel != null && String.IsNullOrEmpty(clearSaleResponseSendModel.TransactionID))
+                    if (storeModel.AntiFraude)
                     {
-                        if (clearSaleResponseSendModel.Orders[0].Status != ClearSaleRejectErrorCode)
+                        //IMPLEMENTAR VERIFICAÇÃO ANTIFRAUDE (MOCK)
+                        ClearSaleService clearSaleService = new ClearSaleService();
+                        ClearSaleResponseSendModel clearSaleResponseSendModel = await clearSaleService.RequestSendAsync(transaction);
+                        if (clearSaleResponseSendModel != null && String.IsNullOrEmpty(clearSaleResponseSendModel.TransactionID))
                         {
-                            transaction.Authorized = false;
-                            var updateDefTransaction = Builders<TransactionModel>.Update.Set(x => x.Authorized, false);
-                            UpdateResult updateResult = Collection.UpdateOne(x => x.TransactionID == transaction.TransactionID, updateDefTransaction);
-                            return new MessageModel("NEG", TipoClasseMensagemEnum.Transaction, transaction.TransactionID.ToString());
+                            if (clearSaleResponseSendModel.Orders[0].Status != ClearSaleRejectErrorCode)
+                            {
+                                transaction.Authorized = false;
+                                var updateDefTransaction = Builders<TransactionModel>.Update.Set(x => x.Authorized, false);
+                                UpdateResult updateResult = Collection.UpdateOne(x => x.TransactionID == transaction.TransactionID, updateDefTransaction);
+                                return new MessageModel("NEG", TipoClasseMensagemEnum.Transaction, transaction.TransactionIDText);
+                            }
                         }
                     }
 
 
-                    //TODO - Verificar qual adquirente o cliente tem
+                    //Verificar quais adquirente a loja tem, e quais regras seguir para cada uma
                     if (storeModel.ListaAdquirente != null && storeModel.ListaAdquirente.Count > 0)
                     {
                         foreach (var item in storeModel.ListaAdquirente)
@@ -91,34 +100,56 @@ namespace PaymentGatewayAPI.Service.Services
                             if (item.ListaBandeiraCartao != null && item.ListaBandeiraCartao.Count > 0)
                             {
                                 //Se encontrar bandeira na adquirente igual a bandeira da transação, incluir transação por essa adquirente
-                                if (item.ListaBandeiraCartao.Find(x => x == transaction.CreditCard.CreditCardBrandEnum) != null)
+                                if (item.ListaBandeiraCartao.Find(x => x == transaction.CreditCard.CreditCardBrand) != null)
                                 {
-                                    HttpResponse resultTransaction;
+                                    MessageModel messageModel;
+
                                     switch (item.IdAdquirente)
                                     {
                                         case AdquirenteEnum.Cielo:
-                                            resultTransaction = _StoneTransactionService.CreateCreditCardTransaction(transaction);
-                                            returnMessage = new MessageModel("SUC", TipoClasseMensagemEnum.Transaction, transaction.TransactionID.ToString());
+                                            HttpResponse<CreateSaleResponse> httpResponseStone = _StoneTransactionService.CreateCreditCardTransaction(transaction);
+
+                                            if (httpResponseStone.Response.CreditCardTransactionResultCollection != null)
+                                            {
+                                                if (httpResponseStone.Response.CreditCardTransactionResultCollection[0].AcquirerReturnCode == "0") //Sucesso
+                                                    return new MessageModel("SUC", TipoClasseMensagemEnum.Transaction, transaction.TransactionIDText);
+                                                else if (httpResponseStone.Response.CreditCardTransactionResultCollection[0].AcquirerReturnCode == "81") //Timeout
+                                                    return new MessageModel("TIMEOUT", TipoClasseMensagemEnum.Transaction, transaction.TransactionIDText);
+                                                else if (httpResponseStone.Response.CreditCardTransactionResultCollection[0].AcquirerReturnCode == "92")
+                                                    return new MessageModel("OUTCRED", TipoClasseMensagemEnum.Transaction, transaction.TransactionIDText);
+                                                else if (httpResponseStone.Response.CreditCardTransactionResultCollection[0].AcquirerReturnCode == "1") //Não autorizado
+                                                    return new MessageModel("UNAUTH", TipoClasseMensagemEnum.Transaction, transaction.TransactionIDText);
+                                            }
                                             break;
                                         case AdquirenteEnum.Stone:
-                                            resultTransaction = _CieloTransactionService.CreateCreditCardTransaction(transaction);
-                                            returnMessage = new MessageModel("SUC", TipoClasseMensagemEnum.Transaction, transaction.TransactionID.ToString());
+                                            var httpResponseCielo = _CieloTransactionService.CreateCreditCardTransaction(transaction);
+                                            messageModel = new MessageModel("SUC", TipoClasseMensagemEnum.Transaction, transaction.TransactionIDText);
                                             break;
                                     }
+
+                                    break;
                                 }
                             }
+                            else
+                            {
+                                return new MessageModel("NOTCARD", TipoClasseMensagemEnum.Transaction);
+                            }
                         }
+
+                    }
+                    else
+                    {
+                        return new MessageModel("NOTADQ", TipoClasseMensagemEnum.Transaction);
                     }
                 }
 
-                returnMessage = new MessageModel("ERR", TipoClasseMensagemEnum.Transaction);
+                return new MessageModel("ERR", TipoClasseMensagemEnum.Transaction, transaction.TransactionIDText);
+
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 throw;
             }
-
-            return returnMessage;
         }
 
         /// <summary>
@@ -126,15 +157,18 @@ namespace PaymentGatewayAPI.Service.Services
         /// </summary>
         /// <param name="storeID"></param>
         /// <returns></returns>
-        public async Task<List<TransactionModel>> ListStoreTransaction(int storeID)
+        public async Task<List<TransactionModel>> ListStoreTransaction(string storeID)
         {
             try
             {
-                return await Collection.Find<TransactionModel>(new BsonDocument("StoreID", storeID))
-                                    .Sort(new BsonDocument("DateCreation", -1))
-                                    .ToListAsync();
+                if (!string.IsNullOrWhiteSpace(storeID) && Guid.TryParse(storeID, out Guid storeGuid))
+                    return await Collection.Find<TransactionModel>(new BsonDocument("StoreID", storeGuid))
+                                        .Sort(new BsonDocument("DateCreation", -1))
+                                        .ToListAsync();
+                else
+                    return new List<TransactionModel>();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 throw;
             }

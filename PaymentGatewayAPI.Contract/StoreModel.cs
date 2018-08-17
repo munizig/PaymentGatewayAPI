@@ -18,7 +18,17 @@ namespace PaymentGatewayAPI.Contract
         /// </summary>
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
+        [DataMember]
         public ObjectId ID { get; set; }
+
+        [DataMember]
+        public Guid StoreID { get; set; }
+
+        [DataMember(Name = "StoreID", EmitDefaultValue = false)]
+        public string StoreIDText
+        {
+            get { return StoreID.ToString(); }
+        }
 
         /// <summary>
         /// Nome da Loja

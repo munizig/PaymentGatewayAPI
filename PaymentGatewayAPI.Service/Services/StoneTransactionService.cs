@@ -25,7 +25,7 @@ namespace PaymentGatewayAPI.Service.Services
         /// Cria e envia uma transação de cartão de crédito.
         /// </summary>
         /// <param name="transactionModel">Transação no modelo genérico de entrada no sistema.</param>
-        public HttpResponse CreateCreditCardTransaction(TransactionModel transactionModel)
+        public HttpResponse<CreateSaleResponse> CreateCreditCardTransaction(TransactionModel transactionModel)
         {
             try
             {
@@ -38,9 +38,9 @@ namespace PaymentGatewayAPI.Service.Services
                 {
                     // Adiciona a transação na requisição.
                     CreditCardTransactionCollection = new Collection<CreditCardTransaction>(new CreditCardTransaction[] { transaction }),
-                    Order = new GatewayApiClient.DataContracts.Order()
+                    Order = new Order()
                     {
-                        OrderReference = transactionModel.TransactionID.ToString()
+                        OrderReference = transactionModel.TransactionIDText
                     }
                 };
 
@@ -53,8 +53,8 @@ namespace PaymentGatewayAPI.Service.Services
                 // Autoriza a transação e recebe a resposta do gateway.
                 var httpResponse = serviceClient.Sale.Create(createSaleRequest);
 
-                Console.WriteLine("Código retorno: {0}", httpResponse.HttpStatusCode);
-                Console.WriteLine("Chave do pedido: {0}", httpResponse.Response.OrderResult.OrderKey);
+                //Console.WriteLine("Código retorno: {0}", httpResponse.HttpStatusCode);
+                //Console.WriteLine("Chave do pedido: {0}", httpResponse.Response.OrderResult.OrderKey);
                 if (httpResponse.Response.CreditCardTransactionResultCollection != null)
                 {
                     Console.WriteLine("Status transação: {0}", httpResponse.Response.CreditCardTransactionResultCollection.FirstOrDefault().CreditCardTransactionStatus);
@@ -112,10 +112,14 @@ namespace PaymentGatewayAPI.Service.Services
             {
                 return new CreditCardTransaction()
                 {
+                    Options = new CreditCardTransactionOptions()
+                    {
+                        PaymentMethodCode = 1
+                    },
                     AmountInCents = transactionModel.AmountInCents,
                     CreditCard = new CreditCard()
                     {
-                        CreditCardBrand = (GatewayApiClient.DataContracts.EnumTypes.CreditCardBrandEnum)transactionModel.CreditCard.CreditCardBrandEnum.Value,
+                        CreditCardBrand = (GatewayApiClient.DataContracts.EnumTypes.CreditCardBrandEnum)transactionModel.CreditCard.CreditCardBrand.Value,
                         CreditCardNumber = transactionModel.CreditCard.CreditCardNumber, //"4111111111111111",
                         ExpMonth = transactionModel.CreditCard.ExpMonth, //10,
                         ExpYear = transactionModel.CreditCard.ExpYear, //22,

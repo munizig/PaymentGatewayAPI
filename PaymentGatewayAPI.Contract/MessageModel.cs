@@ -27,6 +27,12 @@ namespace PaymentGatewayAPI.Contract
                     MessageList.Add("ERR", "Não foi possível criar a transação.");
                     MessageList.Add("NEG", "Transação negada pelo sistema AntiFraude.");
                     MessageList.Add("SUC", "Transação efetuada com sucesso.");
+                    MessageList.Add("NOT", "Transação não encontrada.");
+                    MessageList.Add("NOTADQ", "Não há adquirentes cadastrados para a loja informada.");
+                    MessageList.Add("NOTCARD", "Não há cartões vinculados a adquirentes da loja.");
+                    MessageList.Add("TIMEOUT", "Tempo limite da transação excedido.");
+                    MessageList.Add("OUTCRED", "Transação negada por falta de crédito.");
+                    MessageList.Add("UNAUTH", "Transação não autorizada.");
                     break;
                 case TipoClasseMensagemEnum.Store:
                     MessageList.Add("NOT", "Loja não encontrada.");
