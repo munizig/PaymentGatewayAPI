@@ -14,3 +14,5 @@ O gateway especializado em e-commerce e pode processar pagamentos de vários loj
 
 A API se integra com dois adquirentes famosos no mercado brasileiro.
 
+Cada loja (cliente) tem configurações cadastradas em Banco de Dados para informar com quais adquirentes têm contrato. As configurações também definem em qual adquirente cada cartão de crédito será utilizado nas transações (pagamentos).
+
