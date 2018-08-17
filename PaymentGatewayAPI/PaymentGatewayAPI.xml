@@ -4,5 +4,65 @@
         <name>PaymentGatewayAPI</name>
     </assembly>
     <members>
+        <member name="T:PaymentGatewayAPI.Controllers.TransactionController">
+            <summary>
+            Controller para Leitura e Inclusão de Transações via Gateway
+            </summary>
+        </member>
+        <member name="M:PaymentGatewayAPI.Controllers.TransactionController.Get(System.Guid)">
+            <summary>
+            Método Get para uma Transação
+            </summary>
+            <param name="id">Guid da Transação</param>
+            <returns>Objeto Json contendo a transação. Em caso de erro retorna Json com mensagem de status.</returns>
+            <remarks>
+            Sample Value:
+            
+                "a33e5a7a-53f7-104c-a66c-e9cbada421ab"
+            
+            </remarks>
+        </member>
+        <member name="M:PaymentGatewayAPI.Controllers.TransactionController.Post(PaymentGatewayAPI.Contract.TransactionModel)">
+            <summary>
+            Método que faz a inclusão de um fluxo de Transação.
+            </summary>
+            <param name="transaction">Transaction à ser executada.</param>
+            <returns>Objeto Json no formato MessageModel, contendo a mensagens de status.</returns>
+            <remarks>
+            Sample Request:
+            
+                POST
+            	{
+            		   "AmountInCents" : 105150,
+            		   "Currency" : "BRL",
+            		   "Installments" : 1,
+            		   "CreditCard" : {
+            		   	"CreditCardBrand" : 1, 
+            		   	"CreditCardNumber" : "5522666587598401",
+            		   	"ExpMonth" : 8,
+            		   	"ExpYear" : 19,
+            		   	"HolderName" : "IGOR MUNIZ",
+            		   	"SecurityCode" : 558
+            		   },
+            		   "StoreID" : "a33e5a7a-53f7-104c-a66c-e9cbada421ab",
+            		   "TotalItems" : 1,
+            		   "CountryLocation" : "BRA"
+            	}
+            
+            </remarks>
+        </member>
+        <member name="M:PaymentGatewayAPI.Controllers.TransactionController.GetListTransaction(System.Guid)">
+            <summary>
+            Retorna uma lista de Transações por Loja/Cliente.
+            </summary>
+            <param name="storeId">Guid da Store.</param>
+            <returns>Objeto Json contendo as transações já registradas. Em caso de erro retorna Json com mensagem de status.</returns>
+            <remarks>
+            Sample Value:
+            
+                "a33e5a7a-53f7-104c-a66c-e9cbada421ab"
+            
+            </remarks>
+        </member>
     </members>
 </doc>

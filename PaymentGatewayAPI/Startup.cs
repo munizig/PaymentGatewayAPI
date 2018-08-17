@@ -2,10 +2,10 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.PlatformAbstractions;
 using PaymentGatewayAPI.Service.Interface;
 using PaymentGatewayAPI.Service.Services;
 using Swashbuckle.AspNetCore.Swagger;
+using System;
 using System.IO;
 using System.Reflection;
 
@@ -40,8 +40,8 @@ namespace PaymentGatewayAPI
                     Contact = new Contact() { Name = "Igor Muniz", Email = "munizig@hotmail.com", Url = "https://github.com/munizig" }
                 });
 
-                var basePath = PlatformServices.Default.Application.ApplicationBasePath;
-                var xmlPath = Path.Combine(basePath, GetType().GetTypeInfo().Module.Name.Replace(".dll", ".xml"));
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 c.IncludeXmlComments(xmlPath);
 
             });
@@ -84,19 +84,24 @@ namespace PaymentGatewayAPI
             //UseSwagger — Deve ser utilizado para expor a documentação gerada pelo Swagger 
             //como um endpoint json.
             //app.UseSwagger(x => x.PreSerializeFilters.Add((swagger, httpReq) => swagger.Host = httpReq.Host.ToString()));
+            app.UseStaticFiles();
             app.UseSwagger();
 
             //UseStaticFiles - Deve ser utilizado para que o arquivo redoc.min.js fique disponível 
             //como um arquivo estático depois de gerado. 
             //app.UseStaticFiles();
 
-            if (env.IsDevelopment())
+            //if (env.IsDevelopment())
+            //{
+            //UseSwaggerUI — Deve ser utilizado somente em ambiente de desenvolvimento, 
+            //pois ele expõe a interface interativa do swagger, onde é possível realizar 
+            //testes de response e request para a aplicação.
+            app.UseSwaggerUI(x =>
             {
-                //UseSwaggerUI — Deve ser utilizado somente em ambiente de desenvolvimento, 
-                //pois ele expõe a interface interativa do swagger, onde é possível realizar 
-                //testes de response e request para a aplicação.
-                app.UseSwaggerUI(x => x.SwaggerEndpoint("/swagger/v1/swagger.json", "PaymentGatewayAPI"));
-            }
+                x.SwaggerEndpoint("/swagger/v1/swagger.json", "PaymentGatewayAPI");
+                x.InjectStylesheet("/swagger/ui/custom.css");
+            });
+            //}
 
         }
 
