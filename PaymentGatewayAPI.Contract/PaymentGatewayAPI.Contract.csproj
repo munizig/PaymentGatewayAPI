@@ -5,15 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Cielo\**" />
-    <Compile Remove="Stone\**" />
-    <EmbeddedResource Remove="Cielo\**" />
-    <EmbeddedResource Remove="Stone\**" />
-    <None Remove="Cielo\**" />
-    <None Remove="Stone\**" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="MongoDB.Bson" Version="2.4.4" />
   </ItemGroup>
 

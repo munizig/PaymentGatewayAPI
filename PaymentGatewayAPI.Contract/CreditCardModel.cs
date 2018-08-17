@@ -4,14 +4,20 @@ using System.Runtime.Serialization;
 
 namespace PaymentGatewayAPI.Contract
 {
+    [DataContract]
     public class CreditCardModel
     {
         #region CreditCardBrand
 
+        [DataMember]
         public string CreditCardNumber { get; set; }
+        [DataMember]
         public int ExpMonth { get; set; }
+        [DataMember]
         public int ExpYear { get; set; }
+        [DataMember]
         public int SecurityCode { get; set; }
+        [DataMember]
         public string HolderName { get; set; }
 
         /// <summary>
@@ -22,15 +28,15 @@ namespace PaymentGatewayAPI.Contract
         {
             get
             {
-                if (this.CreditCardBrand == null) { return null; }
-                return this.CreditCardBrand.Value.ToString();
+                if (this.CreditCardBrandEnum == null) { return null; }
+                return this.CreditCardBrandEnum.Value.ToString();
             }
             set
             {
                 if (value == null)
-                    this.CreditCardBrand = null;
+                    this.CreditCardBrandEnum = null;
                 else
-                    this.CreditCardBrand = (CreditCardBrandEnum)Enum.Parse(typeof(CreditCardBrandEnum), value);
+                    this.CreditCardBrandEnum = (CreditCardBrandEnum)Enum.Parse(typeof(CreditCardBrandEnum), value);
             }
         }
 
@@ -38,7 +44,7 @@ namespace PaymentGatewayAPI.Contract
         /// Bandeira do cartão de crédito
         /// </summary>
         [IgnoreDataMember]
-        public CreditCardBrandEnum? CreditCardBrand { get; set; }
+        public CreditCardBrandEnum? CreditCardBrandEnum { get; set; }
 
         #endregion
     }

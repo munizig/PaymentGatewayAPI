@@ -1,4 +1,6 @@
-﻿using System;
+﻿using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
+using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 
@@ -10,11 +12,13 @@ namespace PaymentGatewayAPI.Contract
     [DataContract]
     public class StoreModel
     {
+
         /// <summary>
         /// Identificador da Loja
         /// </summary>
-        [DataMember]
-        public int StoreID { get; set; }
+        [BsonId]
+        [BsonRepresentation(BsonType.ObjectId)]
+        public ObjectId ID { get; set; }
 
         /// <summary>
         /// Nome da Loja

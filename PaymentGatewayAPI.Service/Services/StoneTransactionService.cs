@@ -38,9 +38,9 @@ namespace PaymentGatewayAPI.Service.Services
                 {
                     // Adiciona a transação na requisição.
                     CreditCardTransactionCollection = new Collection<CreditCardTransaction>(new CreditCardTransaction[] { transaction }),
-                    Order = new Order()
+                    Order = new GatewayApiClient.DataContracts.Order()
                     {
-                        OrderReference = "NumeroDoPedido"
+                        OrderReference = transactionModel.TransactionID.ToString()
                     }
                 };
 
@@ -115,7 +115,7 @@ namespace PaymentGatewayAPI.Service.Services
                     AmountInCents = transactionModel.AmountInCents,
                     CreditCard = new CreditCard()
                     {
-                        CreditCardBrand = (GatewayApiClient.DataContracts.EnumTypes.CreditCardBrandEnum)transactionModel.CreditCard.CreditCardBrand.Value,
+                        CreditCardBrand = (GatewayApiClient.DataContracts.EnumTypes.CreditCardBrandEnum)transactionModel.CreditCard.CreditCardBrandEnum.Value,
                         CreditCardNumber = transactionModel.CreditCard.CreditCardNumber, //"4111111111111111",
                         ExpMonth = transactionModel.CreditCard.ExpMonth, //10,
                         ExpYear = transactionModel.CreditCard.ExpYear, //22,

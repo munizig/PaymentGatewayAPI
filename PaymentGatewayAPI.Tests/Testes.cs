@@ -15,7 +15,7 @@ namespace PaymentGatewayAPI.Tests
             AmountInCents = 10000,
             CreditCard = new CreditCardModel()
             {
-                CreditCardBrand = Contract.Enums.CreditCardBrandEnum.Elo,
+                CreditCardBrandEnum = Contract.Enums.CreditCardBrandEnum.Elo,
                 CreditCardNumber = "525241AAA",
                 ExpMonth = 8,
                 ExpYear = 2019,

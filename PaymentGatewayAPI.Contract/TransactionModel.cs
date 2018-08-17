@@ -1,26 +1,30 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
-using PaymentGatewayAPI.Contract;
 using PaymentGatewayAPI.Contract.Enums;
 using System;
 using System.Runtime.Serialization;
 
 namespace PaymentGatewayAPI.Contract
 {
+
+    [DataContract]
     public class TransactionModel
     {
         public TransactionModel()
         {
-            //DateLog = DateTime.Now;
-            TransactionCode = Guid.NewGuid();
+            //DateCreation = DateTime.Now;
+            //TransactionCode = Guid.NewGuid();
         }
 
         [DataMember]
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
-        public string TransactionID { get; set; }
+        public ObjectId TransactionID { get; set; }
+
         [DataMember]
         public Guid TransactionCode { get; set; }
+
+        //public string TransactionCodeText { get { return TransactionCode.ToString(); } }
 
         [DataMember]
         public int AmountInCents { get; set; }
@@ -57,20 +61,41 @@ namespace PaymentGatewayAPI.Contract
 
         [DataMember]
         public int Installments { get; set; }
+
         [DataMember]
         public string OrderReference { get; set; }
+
         [DataMember]
         public DateTime DateCreation { get; set; }
+
         [DataMember]
         public int StatusCode { get; set; }
+
         [DataMember]
         public int OrderKey { get; set; }
 
-        
         /// <summary>
         /// Código da LOJA solicitante da transação
         /// </summary>
         [DataMember]
-        public int StoreID { get; set; }
+        [BsonRepresentation(BsonType.ObjectId)]
+        public ObjectId StoreID { get; set; }
+
+        #region Campos Auxiliares
+
+        /// <summary>
+        /// Quantidade total de produtos do pedido
+        /// </summary>
+        [DataMember]
+        public int TotalItems { get; set; }
+
+        [DataMember]
+        public string CountryLocation { get; set; }
+
+        [DataMember]
+        public bool Authorized { get; set; }
+
+        #endregion  
+
     }
 }

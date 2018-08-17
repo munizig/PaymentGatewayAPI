@@ -23,7 +23,7 @@ namespace PaymentGatewayAPI.Service.Services
 
                 Random randomOrder = new Random();
 
-                Order order = cielo.order(randomOrder.Next(1000, 10000).ToString(), 10000);
+                CieloEcommerce.Order order = cielo.order(randomOrder.Next(1000, 10000).ToString(), 10000);
                 PaymentMethod paymentMethod = cielo.paymentMethod(PaymentMethod.VISA, PaymentMethod.CREDITO_A_VISTA);
 
                 Transaction transaction = cielo.transactionRequest(
@@ -103,7 +103,7 @@ namespace PaymentGatewayAPI.Service.Services
             try
             {
                 PaymentMethod creditCardBrand = null;
-                switch (transactionModel.CreditCard.CreditCardBrand)
+                switch (transactionModel.CreditCard.CreditCardBrandEnum)
                 {
                     case Contract.Enums.CreditCardBrandEnum.Visa:
                         creditCardBrand = new PaymentMethod(PaymentMethod.VISA);
@@ -126,7 +126,7 @@ namespace PaymentGatewayAPI.Service.Services
                 }
 
                 if (creditCardBrand == null)
-                    throw new Exception($"Bandeira do cartão não encontrada. Origem: { transactionModel.CreditCard.CreditCardBrand.ToString() }");
+                    throw new Exception($"Bandeira do cartão não encontrada. Origem: { transactionModel.CreditCard.CreditCardBrandEnum.ToString() }");
 
 
                 return new Transaction()
@@ -134,7 +134,7 @@ namespace PaymentGatewayAPI.Service.Services
                     holder = new Holder(transactionModel.CreditCard.CreditCardNumber, transactionModel.CreditCard.ExpYear.ToString(),
                                         transactionModel.CreditCard.ExpMonth.ToString(), transactionModel.CreditCard.SecurityCode.ToString())
                     { name = transactionModel.CreditCard.HolderName },
-                    order = new Order(transactionModel.TransactionID, transactionModel.AmountInCents),
+                    order = new CieloEcommerce.Order(transactionModel.TransactionID.ToString(), transactionModel.AmountInCents),
                     paymentMethod = new PaymentMethod(creditCardBrand.issuer, (transactionModel.Installments > 1 ? PaymentMethod.PARCELADO_ADM : PaymentMethod.CREDITO_A_VISTA), transactionModel.Installments)
                 };
 

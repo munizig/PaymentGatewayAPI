@@ -1,5 +1,6 @@
 ﻿using MongoDB.Driver;
 
+
 namespace PaymentGatewayAPI.Service
 {
     public static class MongoDBService
@@ -13,9 +14,9 @@ namespace PaymentGatewayAPI.Service
         ///// <param name="databaseName">Database's Name. In this case: </param>
         ///// <param name="collectionName">Collection's Name to search.</param>
         ///// <param name="databaseUrl">Database's Url to connect.</param>
-        public static IMongoCollection<dynamic> GetCollection(string collectionName)
+        public static IMongoCollection<T> GetCollection<T>(string collectionName)
         {
-            IMongoCollection<dynamic> GenericCollection = mongoDataBase.GetCollection<dynamic>(collectionName);
+            IMongoCollection<T> GenericCollection = mongoDataBase.GetCollection<T>(collectionName);
             return GenericCollection;
         }
 

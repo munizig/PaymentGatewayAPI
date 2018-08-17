@@ -1,5 +1,7 @@
-﻿using MongoDB.Driver;
+﻿using MongoDB.Bson;
+using MongoDB.Driver;
 using PaymentGatewayAPI.Contract;
+using PaymentGatewayAPI.Contract.Enums;
 using PaymentGatewayAPI.Service.Interface;
 using System.Threading.Tasks;
 
@@ -14,26 +16,43 @@ namespace PaymentGatewayAPI.Service.Services
 
         public StoreService()
         {
-            Collection = (IMongoCollection<StoreModel>)MongoDBService.GetCollection("Store");
+            Collection = MongoDBService.GetCollection<StoreModel>("Store");
         }
 
         /// <summary>
-        /// Método para verificar se a loja cadastrada opta por anti fraude.
+        /// Método para obter os dados de uma Store
         /// </summary>
         /// <param name="storeID">ID da Loja</param>
-        /// <returns></returns>
-        public async Task<bool> GetAntiFraude(int storeID)
+        /// <returns>StoreModel</returns>
+        public async Task<StoreModel> GetStore(string storeID)
         {
-            var item = await Collection.Find(x => x.StoreID == storeID).FirstOrDefaultAsync();
-            if (item != null)
-                return item.AntiFraude;
-
-            return false;
+            try
+            {
+                return await Collection.Find(x => x.ID == ObjectId.Parse(storeID)).FirstOrDefaultAsync();
+            }
+            catch (System.Exception)
+            {
+                throw;
+            }
         }
 
-        //TODO - Criar método para incluir loja com dados básicos
-        //  ID DA LOJA, NOME DA LOJA, CNPJ, ANTIFRAUDE
-        
-
+        /// <summary>
+        /// Método para criar uma nova Store
+        /// </summary>
+        /// <param name="storeModel">Objeto Store para incluir.</param>
+        /// <returns>ObjectId da Store incluída.</returns>
+        public async Task<MessageModel> SetStore(StoreModel storeModel)
+        {
+            try
+            {
+                //Obtem o ID do item incluído
+                await Collection.InsertOneAsync(storeModel);
+                return new MessageModel("SUC", TipoClasseMensagemEnum.Store, storeModel.ID.ToString());
+            }
+            catch (System.Exception)
+            {
+                throw;
+            }
+        }
     }
 }

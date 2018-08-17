@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Runtime.Serialization;
-using System.Text;
+﻿using System.Runtime.Serialization;
 
 namespace PaymentGatewayAPI.Contract.Enums
 {
     /// <summary>
     /// Enumerado com as Moedas válidas para nova Transaction
     /// </summary>
+    [DataContract]
     public enum CurrencyEnum
     {
         /// <summary>
