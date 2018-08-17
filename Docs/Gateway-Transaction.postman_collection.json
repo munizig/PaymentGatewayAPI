@@ -1,0 +1,106 @@
+{
+	"info": {
+		"_postman_id": "a7724d12-a050-4716-989d-e7f7d262031a",
+		"name": "Gateway-Transaction",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "TransactionPost",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"AmountInCents\" : 12349,\n\t\"Currency\" : \"BRL\",\n\t\"CreditCard\" : {\n\t\t\"CreditCardBrand\" : 1, \n\t\t\"CreditCardNumber\" : \"5522666587598401\",\n\t\t\"ExpMonth\" : 8,\n\t\t\"ExpYear\" : 19,\n\t\t\"HolderName\" : \"IGOR MUNIZ\",\n\t\t\"SecurityCode\" : 558\n\t}\n}"
+				},
+				"url": {
+					"raw": "http://localhost:55455/api/transaction/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "55455",
+					"path": [
+						"api",
+						"transaction",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "TransactionGet",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {},
+				"url": {
+					"raw": "http://localhost:55455/api/transaction/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "55455",
+					"path": [
+						"api",
+						"transaction",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "TransactionGet Id",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {},
+				"url": {
+					"raw": "http://localhost:55455/api/transaction/669580354",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "55455",
+					"path": [
+						"api",
+						"transaction",
+						"669580354"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "TransactionGetList",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": ""
+				},
+				"description": "List of transactions of a store"
+			},
+			"response": []
+		}
+	]
+}

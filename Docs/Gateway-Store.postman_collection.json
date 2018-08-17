@@ -1,0 +1,68 @@
+{
+	"info": {
+		"_postman_id": "9b5485cc-9d07-4d3f-847e-1307b1c3c810",
+		"name": "Gateway-Store",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "StorePost",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"StoreName\" : \"Loja 1\",\n\t\"CNPJ\" : \"11012120000125\",\n\t\"AntiFraude\" : true,\n\t\"DateCreation\" : \"2018-08-17 02:04:00\",\n\t\"ListaAdquirente\" : [{\n\t\t\"IdAdquirente\" : 1,\n\t\t\"ListaBandeiraCartao\" : [{\n\t\t\t1\n\t\t}]\n\t}],\n}"
+				},
+				"url": {
+					"raw": "http://localhost:55455/api/store/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "55455",
+					"path": [
+						"api",
+						"store",
+						""
+					]
+				},
+				"description": "Include a new Store"
+			},
+			"response": []
+		},
+		{
+			"name": "StoreGet",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {},
+				"url": {
+					"raw": "http://localhost:55455/api/transaction/5b765a3c18f37c40544169d9",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "55455",
+					"path": [
+						"api",
+						"transaction",
+						"5b765a3c18f37c40544169d9"
+					]
+				},
+				"description": "Get a Store details"
+			},
+			"response": []
+		}
+	]
+}
