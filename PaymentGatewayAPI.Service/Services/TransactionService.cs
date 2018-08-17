@@ -39,7 +39,10 @@ namespace PaymentGatewayAPI.Service.Services
             try
             {
                 if (!string.IsNullOrWhiteSpace(transactionID) && Guid.TryParse(transactionID, out Guid transactionGuid))
-                    return await Collection.Find(x => x.TransactionID == transactionGuid).FirstOrDefaultAsync();
+                {
+                    var filter = Builders<TransactionModel>.Filter.Eq("TransactionID", transactionGuid);
+                    return await Collection.Find(filter).FirstOrDefaultAsync();
+                }
                 else
                     return new TransactionModel();
             }
