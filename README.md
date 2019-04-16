@@ -1,6 +1,6 @@
 ## PaymentGatewayAPI
-<a href="">
-  <img src="https://ci.appveyor.com/api/projects/status/81n68i2vesd71doj?svg=true"  />
+<a href="https://ci.appveyor.com/project/munizig/paymentgatewayapi">
+  <img src="https://ci.appveyor.com/api/projects/status/81n68i2vesd71doj/branch/master?svg=true" />
 </a> 
 
 # API para Gateway de Pagamentos
