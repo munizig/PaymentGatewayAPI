@@ -3,16 +3,15 @@
   <img src="https://ci.appveyor.com/api/projects/status/81n68i2vesd71doj/branch/master?svg=true" />
 </a> 
 
-# API para Gateway de Pagamentos
+# Payment Gateway's API
 
-A API é capaz de enviar requisições de compras, por exemplo, cartão de crédito, para empresas processadoras de pagamentos, as chamadas adquirentes, e oferece ao lojista um único ponto de integração para várias adquirentes. A vantagem de se usar um gateway é que com apenas um contrato de integração o lojista poderá se integrar com várias empresas de pagamentos e com sistemas antifraudes.
+The API is able to send purchase requisitions to payment processing companies (the buyer calls) and offers the merchant a single point of integration for multiple buyers. The advantage of using a gateway is that with just one integration contract the tenant can integrate with several payment companies and with various anti-fraud systems in an easy and practical way.
 
-O gateway especializado em e-commerce e pode processar pagamentos de vários lojistas. Cada lojista poderá ter contrato com mais de um adquirente e ainda poderá ter ou não contrato com sistemas antifraudes.
+The gateway specializes in e-commerce and can process payments from multiple tenants. Each tenant may have a contract with more than one buyer and may or may not have an anti-fraud agreement.
 
 
-# Processo de Pagamento
+# Payment Process
 
-A API se integra com dois adquirentes famosos no mercado brasileiro.
+The API integrates with two famous acquirers in the Brazilian market.
 
-Cada loja (cliente) tem configurações cadastradas em Banco de Dados para informar com quais adquirentes têm contrato. As configurações também definem em qual adquirente cada cartão de crédito será utilizado nas transações (pagamentos).
-
+Each store (customer) has configurations registered in Database to inform with which buyers have contract. The settings also define in which acquirer each credit card will be used in transactions (payments).
